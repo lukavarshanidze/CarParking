@@ -1,0 +1,30 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+   <%- include('../includes/navigation.ejs') %>
+
+    <main>
+        <form class="product-form" action="/admin/<% if (editing) { %>edit-car<% } else { %>add-car<% } %>" method="POST">
+            <div class="form-control">
+                <label for="carName">Car Name</label>
+                <input type="text" name="carName" id="carName" value="<% if (editing) { %><%= car.carName %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="carNumber">Car Number</label>
+                <input type="text" name="carNumber" id="carNumber" value="<% if (editing) { %><%= car.carNumber %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="carType">Car Type</label>
+                <input type="text" name="carType" id="carType" step="0.01" value="<% if (editing) { %><%= car.carType %><% } %>">
+            </div>
+            <% if (editing) { %>
+                <input type="hidden" value="<%= car.id %>" name="carId">
+            <% } %>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+            <button class="btn" type="submit"><% if (editing) { %>Update Car<% } else { %>Add Car<% } %></button>
+        </form>
+    </main>
+<%- include('../includes/end.ejs') %>

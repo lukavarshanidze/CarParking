@@ -1,0 +1,49 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+
+    <main>
+        <% if (prods.length > 0) { %>
+            <div class="grid">
+                <% for (let each of prods) { %>
+                    <article class="card product-item">
+                        <header class="card__header">
+                            <h1 class="product__title"><%= each.id %></h1>
+                        </header>
+                        <div class="s" style="display: flex; justify-content: center;">
+                            <h2><%= each.address%></h2>
+                        </div>
+                        <div class="S">
+                            <h2 class="product__price">$<%= each.hourlyPrice %></h2>
+                        </div>
+                        <div class="card__actions">
+                            <% if (isAuthenticated) { %>
+                                <% if(isAdmin === 'admin') { %> 
+                                    <a href="/edit-parking/<%= each.id %>" class="btn">Edit</a>
+                                    <form action="/delete-parking/<%= each.id %>" method="POST">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                                        <button type="submit" class="btn">Delete</button>
+                                    </form>
+                                <% } else { %>
+                                    <form action="/take-parking/<%=each.id %>" method="POST">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                                        <input type="hidden" name="name" value="<%= each.name %>"/>
+                                        <input type="hidden" name="address" value="<%= each.address %>"/>
+                                        <input type="hidden" name="hourlyPrice" value="<%= each.hourlyPrice %>"/>
+                                        <input type="hidden" name="taken" value="<%= each.taken %>"/>
+                                        <button type="submit" class="btn">Buy this Parking Slot</button>
+                                    </form>
+                                <% } %>
+                            <% } %>                       
+                        </div>
+                    </article>
+                <% } %>
+            </div>
+        <% } else { %>
+            <h1>No Parking Slots Found!</h1>
+        <% } %>
+    </main>
+<%- include('../includes/end.ejs') %>

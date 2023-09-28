@@ -1,0 +1,40 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+
+            <main>
+                <% if (cars.length > 0) { %>
+                    <div class="grid">
+                        <% for (let car of cars) { %>
+                            <article class="card product-item">
+                                <header class="card__header">
+                                    <h1 class="product__title">
+                                        <%= car.carName %>
+                                    </h1>
+                                </header>
+                                <span><%= car.carNumber %></span>
+                                <div class="card__content">
+                                    <h2 class="product__price">
+                                        <%= car.carType %>
+                                    </h2>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="/admin/edit-car/<%=car.id%>?edit=true" class="btn">Edit</a>
+                                    <form action="/admin/delete-car" method="POST">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                                        <input type="hidden" value="<%= car.id %>" name="carId">
+                                        <button class="btn" type="submit">Delete</button>
+                                    </form>
+
+                                </div>
+                            </article>
+                            <% } %>
+                    </div>
+                    <% } else { %>
+                        <h1>No Cars Found!</h1>
+                        <% } %>
+            </main>
+            <%- include('../includes/end.ejs') %>
