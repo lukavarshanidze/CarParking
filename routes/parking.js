@@ -97,19 +97,14 @@ router.post('/edit-parking', (req, res, next) => {
 })
 
 router.post('/take-parking/:id', (req, res, next) => {
-    const id = req.params.id;
-    const parkingName = req.body.name;
-    const parkingAddress = req.body.address;
-    const parkingPrice = req.body.hourlyPrice;
-    ParkingZone.findAll({ where: { id: id } })
+    const parkingId = req.params.id;
+    ParkingZone.findAll({ where: { id: parkingId } })
         .then(zones => {
             let parkingZone = zones[0]
-            if(parkingZone.taken || req.user.balance < parkingZone.hourlyPrice){
+            const { id, name, address, hourlyPrice, taken } = parkingZone
+            if (parkingZone.taken || req.user.balance < parkingZone.hourlyPrice) {
                 return res.redirect('/')
             }
-            parkingZone.name = parkingName;
-            parkingZone.address = parkingAddress;
-            parkingZone.hourlyPrice = parkingPrice;
             parkingZone.taken = 1;
             return parkingZone.save()
         })
@@ -124,6 +119,26 @@ router.post('/take-parking/:id', (req, res, next) => {
             console.log(err)
         })
 })
+
+/* 
+<script>
+        function startCountdown(duration) {
+            const countdownElement = document.getElementById('countdown');
+
+            function updateCountdown() {
+                const hours = Math.floor(duration / 3600);
+                const minutes = Math.floor((duration % 3600) / 60);
+                const seconds = duration % 60;
+                countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                if (duration > 0) {
+                    duration--;
+                    setTimeout(updateCountdown, 1000); // Update every second
+                }};
+            updateCountdown();
+        }
+        startCountdown(3600); // 1 hour in seconds
+</script>
+*/
 
 
 module.exports = router;

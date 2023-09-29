@@ -63,6 +63,9 @@ app.use((req, res, next) => {
   if(req.user) {
     res.locals.isAdmin = req.user.role
     res.locals.balance = req.user.balance;
+    res.locals.timer = setTimeout(() => {
+      console.log('One hour has passed. Timer stopped.');
+    }, 3600000); 
   }
   next()
 });

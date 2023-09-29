@@ -17,6 +17,7 @@ exports.getProducts = (req, res) => {
 };
 
 exports.getProduct = (req, res, next) => {
+
   const prodId = req.params.productId;
   Car.findByPk(prodId)
     .then((car) => {
@@ -24,6 +25,7 @@ exports.getProduct = (req, res, next) => {
         product: car,
         pageTitle: 'Edit Text',
         path: "/products",
+
       })
     });
 };
