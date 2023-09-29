@@ -12,11 +12,16 @@
                     <article class="card product-item">
                         <header class="card__header">
                             <h1 class="product__title"><%= each.id %></h1>
+                            <p><% if(each.taken === 1) { %></p>
+                                <p style="color: red;">sold</p>
+                            <% } else { %>
+                                <p style="color: green;">Available</p>
+                                <% } %>
                         </header>
-                        <div class="s" style="display: flex; justify-content: center;">
+                        <div style="display: flex; justify-content: center;">
                             <h2><%= each.address%></h2>
                         </div>
-                        <div class="S">
+                        <div>
                             <h2 class="product__price">$<%= each.hourlyPrice %></h2>
                         </div>
                         <div class="card__actions">

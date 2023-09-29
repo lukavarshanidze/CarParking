@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const isAuth = require('../middleware/is-auth');
+const ParkingZone = require('../models/parkingZone');
 
 function isAdmin(req, res, next) {
     if (isAuth && req.user.role === 'admin') {
@@ -100,9 +101,12 @@ router.post('/take-parking/:id', (req, res, next) => {
     const parkingName = req.body.name;
     const parkingAddress = req.body.address;
     const parkingPrice = req.body.hourlyPrice;
-    req.user.getParkingZones({ where: { id: id } })
+    ParkingZone.findAll({ where: { id: id } })
         .then(zones => {
             let parkingZone = zones[0]
+            if(parkingZone.taken || req.user.balance < parkingZone.hourlyPrice){
+                return res.redirect('/')
+            }
             parkingZone.name = parkingName;
             parkingZone.address = parkingAddress;
             parkingZone.hourlyPrice = parkingPrice;
@@ -110,6 +114,10 @@ router.post('/take-parking/:id', (req, res, next) => {
             return parkingZone.save()
         })
         .then(result => {
+            req.user.balance = req.user.balance - result.hourlyPrice
+            return req.user.save()
+        })
+        .then(() => {
             res.redirect('/')
         })
         .catch(err => {
