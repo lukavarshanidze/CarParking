@@ -36,10 +36,6 @@
                                 <% } else { %>
                                     <form action="/take-parking/<%=each.id %>" method="POST">
                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-                                        <input type="hidden" name="name" value="<%= each.name %>"/>
-                                        <input type="hidden" name="address" value="<%= each.address %>"/>
-                                        <input type="hidden" name="hourlyPrice" value="<%= each.hourlyPrice %>"/>
-                                        <input type="hidden" name="taken" value="<%= each.taken %>"/>
                                         <button type="submit" class="btn">Buy this Parking Slot</button>
                                     </form>
                                 <% } %>
